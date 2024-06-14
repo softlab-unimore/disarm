@@ -8,15 +8,15 @@ import torch.nn as nn
 from torch.utils.data import DataLoader
 from transformers import AdamW
 
-from .utils import set_random_seeds, get_config, get_device
-from .data_processor import StudentEssayProcessor, StudentEssayWithDiscourseInjectionProcessor,\
+from utils import set_random_seeds, get_config, get_device
+from data_processor import StudentEssayProcessor, StudentEssayWithDiscourseInjectionProcessor,\
                             DebateProcessor, DebateWithDiscourseInjectionProcessor,\
                             MARGProcessor, MARGWithDiscourseInjectionProcessor,\
                             DiscourseMarkerProcessor, dataset,\
                             collate_fn, collate_fn_adv
-from .batch_sampler import BalancedSampler
-from .models import AdversarialNet, BaselineModel
-from .train import Trainer
+from batch_sampler import BalancedSampler
+from models import AdversarialNet, BaselineModel
+from train import Trainer
 
 
 def run():
@@ -26,27 +26,27 @@ def run():
 
   if config["dataset"] == "student_essay":
     if config["injection"]:
-      processor = StudentEssayWithDiscourseInjectionProcessor()
+      processor = StudentEssayWithDiscourseInjectionProcessor(config)
     else:
-      processor = StudentEssayProcessor()
+      processor = StudentEssayProcessor(config)
 
     path_train = "./data/student_essay/train_essay.txt"
     path_dev = "./data/student_essay/dev_essay.txt"
     path_test = "./data/student_essay/test_essay.txt"
   elif config["dataset"] == "debate":
     if config["injection"]:
-      processor = DebateWithDiscourseInjectionProcessor()
+      processor = DebateWithDiscourseInjectionProcessor(config)
     else:
-      processor = DebateProcessor()
+      processor = DebateProcessor(config)
 
     path_train = "./data/debate/train_debate_concept.txt"
     path_dev = "./data/debate/dev_debate_concept.txt"
     path_test = "./data/debate/test_debate_concept.txt"
   elif config["dataset"] == "m-arg":
     if config["injection"]:
-      processor = MARGWithDiscourseInjectionProcessor()
+      processor = MARGWithDiscourseInjectionProcessor(config)
     else:
-      processor = MARGProcessor()
+      processor = MARGProcessor(config)
 
     path_train = "./data/m-arg/presidential_final.csv"
     path_dev = path_train
@@ -64,7 +64,7 @@ def run():
     data_test = processor.read_input_files(path_test, name="test")
 
   if config["adversarial"] or config["discovery_finetuning"]:
-    df = datasets.load_dataset("discovery","discovery")
+    df = datasets.load_dataset("discovery","discovery", trust_remote_code=True)
     adv_processor = DiscourseMarkerProcessor()
     if not config["dataset_from_saved"]:
       print("processing discourse marker dataset...")

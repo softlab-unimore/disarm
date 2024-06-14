@@ -102,8 +102,8 @@ class DataProcessor:
 
 class DiscourseMarkerProcessor(DataProcessor):
 
-  def __init__(self):
-    super(DiscourseMarkerProcessor, self).__init__()
+  def __init__(self, config):
+    super(DiscourseMarkerProcessor, self).__init__(config)
 
     self.mapping = self.load_json('json/word_target.json')
     self.id_to_word = self.load_json('json/id_to_word.json')
@@ -145,8 +145,8 @@ class DiscourseMarkerProcessor(DataProcessor):
 
 class StudentEssayProcessor(DataProcessor):
 
-  def __init__(self,):
-    super(StudentEssayProcessor,self).__init__()
+  def __init__(self, config):
+    super(StudentEssayProcessor,self).__init__(config)
 
 
   def read_input_files(self, file_path, name="train", pipe=None):
@@ -205,8 +205,8 @@ class StudentEssayProcessor(DataProcessor):
 
 class DebateProcessor(DataProcessor):
 
-  def __init__(self,):
-    super(DebateProcessor,self).__init__()
+  def __init__(self, config):
+    super(DebateProcessor,self).__init__(config)
 
   def read_input_files(self, file_path, name="train", pipe=None):
       """
@@ -263,8 +263,8 @@ class DebateProcessor(DataProcessor):
 
 class MARGProcessor(DataProcessor):
 
-  def __init__(self):
-    super(MARGProcessor, self).__init__()
+  def __init__(self, config):
+    super(MARGProcessor, self).__init__(config)
     self.pipe = pipeline("text-classification", model="sileod/roberta-base-discourse-marker-prediction")
 
   def read_input_files(self, file_path, name="train", pipe=None):
@@ -322,8 +322,8 @@ class MARGProcessor(DataProcessor):
 
 class StudentEssayWithDiscourseInjectionProcessor(StudentEssayProcessor):
 
-  def __init__(self):
-    super(StudentEssayWithDiscourseInjectionProcessor, self).__init__()
+  def __init__(self, config):
+    super(StudentEssayWithDiscourseInjectionProcessor, self).__init__(config)
     self.pipe = pipeline("text-classification", model="sileod/roberta-base-discourse-marker-prediction")
 
   def read_input_files(self, file_path, name="train"):
@@ -339,12 +339,12 @@ class StudentEssayWithDiscourseInjectionProcessor(StudentEssayProcessor):
 
 class DebateWithDiscourseInjectionProcessor(DebateProcessor):
 
-  def __init__(self,):
-    super(DebateWithDiscourseInjectionProcessor,self).__init__()
+  def __init__(self, config):
+    super(DebateWithDiscourseInjectionProcessor,self).__init__(config)
     self.pipe = pipeline("text-classification", model="sileod/roberta-base-discourse-marker-prediction")
 
 
-  def read_input_files(self, file_path, max_sentence_length=-1, name="train"):
+  def read_input_files(self, file_path, name="train"):
       """
       Reads input files in tab-separated format.
       Will split file_paths on comma, reading from multiple files.
@@ -357,11 +357,11 @@ class DebateWithDiscourseInjectionProcessor(DebateProcessor):
 
 class MARGWithDiscourseInjectionProcessor(DataProcessor):
 
-  def __init__(self,):
-    super(MARGWithDiscourseInjectionProcessor,self).__init__()
+  def __init__(self, config):
+    super(MARGWithDiscourseInjectionProcessor,self).__init__(config)
     self.pipe = pipeline("text-classification", model="sileod/roberta-base-discourse-marker-prediction")
 
-  def read_input_files(self, file_path, max_sent_length=-1, name="train"):
+  def read_input_files(self, file_path, name="train"):
       """
       Reads input files in tab-separated format.
       Will split file_paths on comma, reading from multiple files.

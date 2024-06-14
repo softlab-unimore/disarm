@@ -10,7 +10,7 @@ from matplotlib.patches import Patch
 from sklearn.manifold import TSNE
 from tqdm import tqdm
 
-from .utils import output_metrics
+from utils import output_metrics
 
 class Trainer:
     def __init__(self, config, device):

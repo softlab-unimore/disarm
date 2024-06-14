@@ -11,15 +11,19 @@ def get_config():
     config.read('config.ini')
 
     to_int = ["num_classes", "num_classes_adv", "embed_size", "first_last_avg",\
-            "seed", "batch_size", "max_len_sent", "epochs", "adversarial", "dataset_from_saved",\
+            "seed", "batch_size", "max_sent_len", "epochs", "adversarial", "dataset_from_saved",\
             "injection", "grid_search", "visualize"]
     to_float = ["weight_decay", "lr"]
     to_list = ["class_weight"]
     datasets = ["student_essay", "debate", "m-arg"]
 
+    config = config._sections
+    config = config | config["default_args"]
+    del config["default_args"]
+
     for el in to_int:
         config[el] = int(config[el])
-    
+
     for el in to_float:
         config[el] = float(config[el])
 

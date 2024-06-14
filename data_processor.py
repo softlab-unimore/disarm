@@ -105,7 +105,7 @@ class DiscourseMarkerProcessor(DataProcessor):
   def __init__(self, config):
     super(DiscourseMarkerProcessor, self).__init__(config)
 
-    self.mapping = self.load_json('json/word_target.json')
+    self.mapping = self.load_json('json/word_to_target.json')
     self.id_to_word = self.load_json('json/id_to_word.json')
 
   def load_json(self, path):

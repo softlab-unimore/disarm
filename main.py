@@ -63,7 +63,7 @@ def run():
     data_dev = processor.read_input_files(path_dev, name="dev")
     data_test = processor.read_input_files(path_test, name="test")
 
-  if config["adversarial"] or config["discovery_finetuning"]:
+  if config["adversarial"]:
     df = datasets.load_dataset("discovery","discovery", trust_remote_code=True)
     adv_processor = DiscourseMarkerProcessor(config)
     if not config["dataset_from_saved"]:
@@ -101,8 +101,8 @@ def run():
 
   model.to(device)
 
-  dev_dataloader = DataLoader(dev_set, batch_size=config["batch_size"], shuffle=True, collate_fn=collate_fn_concatenated)
-  test_dataloader = DataLoader(test_set, batch_size=config["batch_size"], shuffle=True, collate_fn=collate_fn_concatenated)
+  dev_dataloader = DataLoader(dev_set, batch_size=config["batch_size"], shuffle=True, collate_fn=collate_fn)
+  test_dataloader = DataLoader(test_set, batch_size=config["batch_size"], shuffle=True, collate_fn=collate_fn)
 
   no_decay = ["bias", "LayerNorm.weight"]
   optimizer_grouped_parameters = [

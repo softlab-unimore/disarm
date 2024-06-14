@@ -65,7 +65,7 @@ def run():
 
   if config["adversarial"] or config["discovery_finetuning"]:
     df = datasets.load_dataset("discovery","discovery", trust_remote_code=True)
-    adv_processor = DiscourseMarkerProcessor()
+    adv_processor = DiscourseMarkerProcessor(config)
     if not config["dataset_from_saved"]:
       print("processing discourse marker dataset...")
       train_adv = adv_processor.process_dataset(df["train"])

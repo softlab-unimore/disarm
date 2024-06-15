@@ -8,7 +8,7 @@ This repository holds the code of the paper "Code of the paper "Argument Relatio
 
 ## Installation
 
-**Disarm** was tested on Python 3.10.12 with a Google Colab V100 system. It is recommended to use a virtual environment to setup the model.  
+**Disarm** was tested on Python 3.10.12 using a Google Colab V100 system. It is recommended to set up the model in a virtual environment.
 
 ```shell
 python -m venv [NAME_OF_ENV]
@@ -59,4 +59,4 @@ python main.py --dataset [NAME_OF_DATASET]
 python main.py --dataset [NAME_OF_DATASET] --visualize
 ```
 
-In order to visualize the embeddings, you must have trained a model on the dataset you want to plot. During training, the best model is saved in a file called `[NAME_OF_DATASET]_model.pt`. The `--visualize` flag forces the program to load the model, calculate the embeddings of the dataset and plot them.
+In order to visualize the embeddings, you must have trained a model on the dataset you want to plot. After training, the best model is saved in a file called `[NAME_OF_DATASET]_model.pt`. The `--visualize` flag forces the program to load the model, calculate the embeddings of the dataset and plot them.

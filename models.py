@@ -98,7 +98,7 @@ class AdversarialNet(torch.nn.Module):
       predictions = self.linear_layer(samples)
       predictions_adv = self.linear_layer_adv(samples_adv)
 
-      mean_grl = GRLayer.apply(torch.mean(embed_sent1, dim=1), .001)
+      mean_grl = GRLayer.apply(torch.mean(embed_sent1, dim=1), .01)
       task_prediction = self.task_linear(mean_grl)
 
       return predictions, predictions_adv, task_prediction

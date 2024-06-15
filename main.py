@@ -159,7 +159,7 @@ def run():
         del optimizer
 
         set_random_seeds(config["seed"])
-        model = AdversarialNet()
+        model = AdversarialNet(config)
         model = model.to(device)
 
         optimizer_grouped_parameters = [

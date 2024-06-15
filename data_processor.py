@@ -122,10 +122,10 @@ class DiscourseMarkerProcessor(DataProcessor):
     new_dataset = []
 
     for sample in dataset:
-      if self.id_to_word[sample["label"]] not in self.mapping.keys():
+      if self.id_to_word[str(sample["label"])] not in self.mapping.keys():
         continue
 
-      new_dataset.append([sample["sentence1"], sample["sentence2"], self.mapping[self.id_to_word[sample["label"]]]])
+      new_dataset.append([sample["sentence1"], sample["sentence2"], self.mapping[self.id_to_word[str(sample["label"])]]])
 
     one_hot_encoder = OneHotEncoder(handle_unknown="ignore", sparse_output=False)
     labels = []

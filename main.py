@@ -117,8 +117,7 @@ def run():
   ]
   optimizer = AdamW(optimizer_grouped_parameters, lr=config["lr"], weight_decay=config["weight_decay"])
 
-  class_weight = config[config["dataset"]]["class_weight"]
-  loss_fn = nn.CrossEntropyLoss(weight=torch.tensor(class_weight).to(device))
+  loss_fn = nn.CrossEntropyLoss(weight=torch.tensor(config["class_weight"]).to(device))
 
   best_dev_f1 = -1
   result_metrics = []

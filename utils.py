@@ -1,37 +1,63 @@
 import torch
 import random
 import configparser
+import argparse
 import numpy as np
 
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
 from ast import literal_eval
 
+
+class_weights = {
+    "student_essay": [1,10],
+    "debate": [1,1],
+    "m-arg": [9.375, 30, 1]
+}
+
+def arg_check(args):
+    if args["grid_search"]:
+        assert args["adversarial"], "Grid search can only be applied with adversarial training. Please run the program with adversarial training if you want to use grid_search"
+    if args["adversarial"] and not args["grid_search"]:
+        assert args["discovery_weight"] != -1, "You must set grid_search, or directly using discovery_weight and adv_weight to use adversarial training"
+    assert args["dataset"] in ["student_essay", "debate", "m-arg"], "The dataset must be one of 'student_essay', 'debate' or 'm-arg'"
+    assert len(args["class_weight"]) == args["num_classes"], "The class_weight must be of the same size as the number of targets inside the dataset"
+
 def get_config():
-    config = configparser.ConfigParser()
-    config.read('config.ini')
+    parser = argparse.ArgumentParser(description="Argument parser for model configuration")
 
-    to_int = ["num_classes", "num_classes_adv", "embed_size", "first_last_avg",\
-            "seed", "batch_size", "max_sent_len", "epochs", "adversarial", "dataset_from_saved",\
-            "injection", "grid_search", "visualize"]
-    to_float = ["weight_decay", "lr"]
-    to_list = ["class_weight"]
-    datasets = ["student_essay", "debate", "m-arg"]
+    parser.add_argument('--model_name', type=str, default='roberta-base', help='Model name')
+    parser.add_argument('--embed_size', type=int, default=768, help='Embedding size')
+    parser.add_argument('--first_last_avg', type=int, default=1, help='Use first and last average')
+    parser.add_argument('--seed', type=int, default=1, help='Random seed')
+    parser.add_argument('--batch_size', type=int, default=64, help='Batch size')
+    parser.add_argument('--max_sent_len', type=int, default=150, help='Maximum sentence length')
+    parser.add_argument('--epochs', type=int, default=30, help='Number of epochs')
+    parser.add_argument('--weight_decay', type=float, default=0.01, help='Weight decay')
+    parser.add_argument('--lr', type=float, default=0.00001, help='Learning rate')
+    parser.add_argument('--discovery_weight', type=float, default=-1, help='Discovery weight')
+    parser.add_argument('--adv_weight', type=float, default=-1, help='Adversarial weight')
+    parser.add_argument('--adversarial', action="store_true", default=0, help='Use adversarial training')
+    parser.add_argument('--dataset_from_saved', action="store_true", default=0, help='Load dataset from saved checkpoint')
+    parser.add_argument('--injection', action="store_true", default=0, help='Use injection method')
+    parser.add_argument('--grid_search', action="store_true", default=0, help='Perform grid search')
+    parser.add_argument('--visualize', action="store_true", default=0, help='Visualize results')
+    parser.add_argument('--dataset', type=str, required=True, help='Dataset name')
 
-    config = config._sections
-    config = config | config["default_args"]
-    del config["default_args"]
+    parser.add_argument('--class_weight', type=float, nargs='+', default=[], help='Class weights')
 
-    for el in to_int:
-        config[el] = int(config[el])
+    args = vars(parser.parse_args())
 
-    for el in to_float:
-        config[el] = float(config[el])
+    if len(args["class_weight"]) == 0:
+        args["class_weight"] = class_weights[args["dataset"]]
 
-    for el in to_list:
-        for dataset_name in datasets:
-            config[dataset_name][el] = literal_eval(config[dataset_name][el])
+    args["num_classes_adv"] = 3
+    args["num_classes"] = 2 if args["dataset"] in ["student_essay", "debate"] else 3
 
-    return config
+    arg_check(args)
+
+    return args
+
+
 
 def get_device():
     device = torch.device("cpu")

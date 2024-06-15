@@ -62,7 +62,8 @@ python main.py --dataset [NAME_OF_DATASET]
 #### Visualize the embeddings
 
 ```shell
-python main.py --dataset [NAME_OF_DATASET] --visualize
+python main.py --dataset [NAME_OF_DATASET] --visualize [NAME_OF_DATASET_TO_PLOT]
 ```
 
+where `[NAME_OF_DATASET_TO_PLOT]` must be either `[NAME_OF_DATASET]` or `discovery`
 In order to visualize the embeddings, you must have trained a model on the dataset you want to plot. After training, the best model is saved in a file called `[NAME_OF_DATASET]_model.pt`. The `--visualize` flag forces the program to load the model, calculate the embeddings of the dataset and plot them.

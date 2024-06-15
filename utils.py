@@ -22,7 +22,7 @@ def arg_check(args):
     if args["discovery_weight"] != -1 or args["adv_weight"] != -1:
         assert args["adversarial"], "You must choose adversarial training to use discovery_weight and adv_weight"
     if len(args["visualize"]) != 0:
-        assert args["visualize"] == "discovery" of args["visualize"] == args["dataset"], "The argument --visualize must have the same value of --dataset or 'discovery'"
+        assert args["visualize"] == "discovery" or args["visualize"] == args["dataset"], "The argument --visualize must have the same value of --dataset or 'discovery'"
 
     assert args["dataset"] in ["student_essay", "debate", "m-arg"], "The dataset must be one of 'student_essay', 'debate' or 'm-arg'"
     assert len(args["class_weight"]) == args["num_classes"] or len(args["class_weight"]) == 0, "The class_weight must be of the same size as the number of targets inside the dataset"

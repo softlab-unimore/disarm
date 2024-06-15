@@ -21,6 +21,8 @@ def arg_check(args):
         assert args["discovery_weight"] != -1 and args["adv_weight"] != -1, "You must set grid_search, or directly using discovery_weight and adv_weight to use adversarial training"
     if args["discovery_weight"] != -1 or args["adv_weight"] != -1:
         assert args["adversarial"], "You must choose adversarial training to use discovery_weight and adv_weight"
+    if len(args["visualize"]) != 0:
+        assert args["visualize"] == "discovery" of args["visualize"] == args["dataset"], "The argument --visualize must have the same value of --dataset or 'discovery'"
 
     assert args["dataset"] in ["student_essay", "debate", "m-arg"], "The dataset must be one of 'student_essay', 'debate' or 'm-arg'"
     assert len(args["class_weight"]) == args["num_classes"] or len(args["class_weight"]) == 0, "The class_weight must be of the same size as the number of targets inside the dataset"
@@ -43,7 +45,7 @@ def get_config():
     parser.add_argument('--dataset_from_saved', action="store_true", default=0, help='Load dataset from saved checkpoint')
     parser.add_argument('--injection', action="store_true", default=0, help='Use injection method')
     parser.add_argument('--grid_search', action="store_true", default=0, help='Perform grid search')
-    parser.add_argument('--visualize', action="store_true", default=0, help='Visualize results')
+    parser.add_argument('--visualize', type=str, default="", help='Visualize results')
     parser.add_argument('--dataset', type=str, required=True, help='Dataset name')
 
     parser.add_argument('--class_weight', type=float, nargs='+', default=[], help='Class weights')

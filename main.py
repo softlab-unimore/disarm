@@ -92,7 +92,7 @@ def run():
 
     model = AdversarialNet(config)
 
-    if config["visualize"]:
+    if len(config["visualize"]) > 0:
         try:
             model.load_state_dict(torch.load(f"./{config['dataset']}_model.pt"))
             model.eval()
@@ -124,8 +124,8 @@ def run():
 
   trainer = Trainer(config, device)
 
-  if config["visualize"]:
-    trainer.visualize(model, test_dataloader)
+  if len(config["visualize"]) > 0:
+    trainer.visualize(model, test_dataloader, config)
   elif config["grid_search"]:
     range_disc = np.arange(0,1.2,0.2)
     range_adv = np.arange(0,1.2,0.2)

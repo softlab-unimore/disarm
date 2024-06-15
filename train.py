@@ -99,7 +99,7 @@ class Trainer:
         val_acc, val_prec, val_recall, val_f1 = output_metrics(val_labels, val_preds)
         return val_acc, val_prec, val_recall, val_f1
 
-    def visualize(self, model, test_dataloader):
+    def visualize(self, model, test_dataloader, config):
         num_batches_to_plot = 50
         model.eval()
 
@@ -128,7 +128,17 @@ class Trainer:
             tsne = TSNE(random_state=1)
             tsne_results = tsne.fit_transform(embeddings.detach().cpu())
 
-            new_labels = ["Elaborational", "Inferential", "Contrastive"] #["Support", "Attack"] #["Elaborational", "Inferential", "Contrastive"]
+            if config["visualize"] in ["student_essay", "debate"]:
+                new_labels = ["Support", "Attack"]
+                colors = np.array(['#035efc', '#fc9803'])
+            elif config["visualize"] == "m-arg":
+                new_labels = ["Support", "Attack", "Neither"]
+                colors = np.array(['#035efc', '#5cfa00', '#fc9803'])
+            elif config["visualize"] == "discovery":
+                new_labels = ["Elaborational", "Inferential", "Contrastive"]
+                colors = np.array(['#035efc', '#5cfa00', '#fc9803'])
+            else:
+                raise ValueError(f"The dataset {config['visualize']} cannot be plotted. Please use {config['dataset']} or discovery.")
 
             df_tsne = pd.DataFrame(tsne_results, columns=["x","y"])
             df_tsne["label"] = torch.argmax(tot_labels.detach(), dim=-1).cpu()
@@ -142,7 +152,6 @@ class Trainer:
             plt.ylabel('x2'.translate(SUB))
 
             labels = torch.argmax(tot_labels.detach().cpu(), dim=-1).reshape(-1).numpy()
-            colors = np.array(['#035efc', '#5cfa00', '#fc9803'])
 
             point_colors = colors[labels]
 
@@ -154,4 +163,4 @@ class Trainer:
 
             plt.show()
 
-            fig.savefig('se_roberta.pdf', bbox_inches='tight')
+            fig.savefig(f"{config['visualize']}.pdf", bbox_inches='tight')

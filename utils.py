@@ -18,9 +18,12 @@ def arg_check(args):
     if args["grid_search"]:
         assert args["adversarial"], "Grid search can only be applied with adversarial training. Please run the program with adversarial training if you want to use grid_search"
     if args["adversarial"] and not args["grid_search"]:
-        assert args["discovery_weight"] != -1, "You must set grid_search, or directly using discovery_weight and adv_weight to use adversarial training"
+        assert args["discovery_weight"] != -1 and args["adv_weight"] != -1, "You must set grid_search, or directly using discovery_weight and adv_weight to use adversarial training"
+    if args["discovery_weight"] != -1 or args["adv_weight"] != -1:
+        assert args["adversarial"], "You must choose adversarial training to use discovery_weight and adv_weight"
+
     assert args["dataset"] in ["student_essay", "debate", "m-arg"], "The dataset must be one of 'student_essay', 'debate' or 'm-arg'"
-    assert len(args["class_weight"]) == args["num_classes"], "The class_weight must be of the same size as the number of targets inside the dataset"
+    assert len(args["class_weight"]) == args["num_classes"] or len(args["class_weight"]) == 0, "The class_weight must be of the same size as the number of targets inside the dataset"
 
 def get_config():
     parser = argparse.ArgumentParser(description="Argument parser for model configuration")
@@ -47,13 +50,13 @@ def get_config():
 
     args = vars(parser.parse_args())
 
-    if len(args["class_weight"]) == 0:
-        args["class_weight"] = class_weights[args["dataset"]]
-
     args["num_classes_adv"] = 3
     args["num_classes"] = 2 if args["dataset"] in ["student_essay", "debate"] else 3
 
     arg_check(args)
+
+    if len(args["class_weight"]) == 0:
+        args["class_weight"] = class_weights[args["dataset"]]
 
     return args
 

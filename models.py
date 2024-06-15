@@ -5,14 +5,14 @@ from torch import nn
 
 class GRLayer(torch.autograd.Function):
     @staticmethod
-    def forward(ctx, x, lmbd=0.01):
-        ctx.lmbd = torch.tensor(lmbd)
+    def forward(bkw, x, lambda_value=0.01):
+        bkw.lambda_value = torch.tensor(lambda_value)
         return x.reshape_as(x)
 
     @staticmethod
-    def backward(ctx, grad_output):
-        grad_input = grad_output.clone()
-        return ctx.lmbd * grad_input.neg(), None
+    def backward(bkw, prev_gradient):
+        post_gradient = prev_gradient.clone()
+        return bkw.lambda_value * post_gradient.neg(), None
 
 
 class AdversarialNet(torch.nn.Module):

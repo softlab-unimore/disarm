@@ -1,6 +1,6 @@
 # Disarm
 
-
+![Disarm architecture](img/model_architecture.png "Disarm architecture")
 
 **Disarm** is a RoBERTa based neural system for Argument Relation Classification (ARC). The model leverages discourse markers through adversarial training on the [Discovery](https://github.com/sileod/Discovery) dataset. In particular, Disarm maps into a joint embedding space the argumentative units from the ARC task and sentences from the Discourse Marker Detection task (DMD). This result is achieved through the use of a Gradient Reversal Layer.
 
@@ -27,11 +27,6 @@ For a detailed description of the work please read our paper. Please cite the pa
     abstract = "Argument relation classification (ARC) identifies supportive, contrasting and neutral relations between argumentative units. The current approaches rely on transformer architectures which have proven to be more effective than traditional methods based on hand-crafted linguistic features. In this paper, we introduce DISARM, which advances the state of the art with a training procedure combining multi-task and adversarial learning strategies. By jointly solving the ARC and discourse marker detection tasks and aligning their embedding spaces into a unified latent space, DISARM outperforms the accuracy of existing approaches.",
 }
 ```
-
-
-![Disarm architecture](img/model_architecture.png "Disarm architecture")
-
-
 
 ## Installation
 

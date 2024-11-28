@@ -4,8 +4,29 @@
 
 **Disarm** is a RoBERTa based neural system for Argument Relation Classification (ARC). The model leverages discourse markers through adversarial training on the [Discovery](https://github.com/sileod/Discovery) dataset. In particular, Disarm maps into a joint embedding space the argumentative units from the ARC task and sentences from the Discourse Marker Detection task (DMD). This result is achieved through the use of a Gradient Reversal Layer.
 
-This repository holds the code of the paper "Argument Relation Classification through Discourse Markers and Adversarial Training"
+This repository holds the code of the paper ["Argument Relation Classification through Discourse Markers and Adversarial Training"](https://aclanthology.org/2024.emnlp-main.1054/) published at EMNLP 2024.
+For a detailed description of the work please read our paper. Please cite the paper if you use the code from this repository in your work!
 
+```
+@inproceedings{contalbo-etal-2024-argument,
+    title = "Argument Relation Classification through Discourse Markers and Adversarial Training",
+    author = "Contalbo, Michele Luca  and
+      Guerra, Francesco  and
+      Paganelli, Matteo",
+    editor = "Al-Onaizan, Yaser  and
+      Bansal, Mohit  and
+      Chen, Yun-Nung",
+    booktitle = "Proceedings of the 2024 Conference on Empirical Methods in Natural Language Processing",
+    month = nov,
+    year = "2024",
+    address = "Miami, Florida, USA",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2024.emnlp-main.1054",
+    doi = "10.18653/v1/2024.emnlp-main.1054",
+    pages = "18949--18954",
+    abstract = "Argument relation classification (ARC) identifies supportive, contrasting and neutral relations between argumentative units. The current approaches rely on transformer architectures which have proven to be more effective than traditional methods based on hand-crafted linguistic features. In this paper, we introduce DISARM, which advances the state of the art with a training procedure combining multi-task and adversarial learning strategies. By jointly solving the ARC and discourse marker detection tasks and aligning their embedding spaces into a unified latent space, DISARM outperforms the accuracy of existing approaches.",
+}
+```
 
 
 ![Disarm architecture](img/model_architecture.png "Disarm architecture")

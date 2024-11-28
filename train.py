@@ -124,43 +124,41 @@ class Trainer:
 
         SUB = str.maketrans("12", "₁₂")
 
-        for i in range(1):
-            tsne = TSNE(random_state=1)
-            tsne_results = tsne.fit_transform(embeddings.detach().cpu())
+        tsne = TSNE(random_state=1)
+        tsne_results = tsne.fit_transform(embeddings.detach().cpu())
 
-            if config["visualize"] in ["student_essay", "debate"]:
-                new_labels = ["Support", "Attack"]
-                colors = np.array(['#035efc', '#fc9803'])
-            elif config["visualize"] == "m-arg":
-                new_labels = ["Support", "Attack", "Neither"]
-                colors = np.array(['#035efc', '#5cfa00', '#fc9803'])
-            elif config["visualize"] == "discovery":
-                new_labels = ["Elaborational", "Inferential", "Contrastive"]
-                colors = np.array(['#035efc', '#5cfa00', '#fc9803'])
-            else:
-                raise ValueError(f"The dataset {config['visualize']} cannot be plotted. Please use {config['dataset']} or discovery.")
+        if config["visualize"] in ["student_essay", "debate"]:
+            new_labels = ["Support", "Attack"]
+            colors = np.array(['#035efc', '#fc9803'])
+        elif config["visualize"] == "m-arg":
+            new_labels = ["Support", "Attack", "Neither"]
+            colors = np.array(['#035efc', '#5cfa00', '#fc9803'])
+        elif config["visualize"] == "discovery":
+            new_labels = ["Elaborational", "Inferential", "Contrastive"]
+            colors = np.array(['#035efc', '#5cfa00', '#fc9803'])
+        else:
+            raise ValueError(f"The dataset {config['visualize']} cannot be plotted. Please use {config['dataset']} or discovery.")
 
-            df_tsne = pd.DataFrame(tsne_results, columns=["x","y"])
-            df_tsne["label"] = torch.argmax(tot_labels.detach(), dim=-1).cpu()
+        df_tsne = pd.DataFrame(tsne_results, columns=["x","y"])
+        df_tsne["label"] = torch.argmax(tot_labels.detach(), dim=-1).cpu()
 
-            fig, ax = plt.subplots(figsize=(8,6))
-            ax.set_xlim([-80, 95])
-            ax.set_ylim([-50, 50])
-            ax.set_facecolor('white')
-            fig.tight_layout()
-            plt.xlabel('x1'.translate(SUB))
-            plt.ylabel('x2'.translate(SUB))
+        fig, ax = plt.subplots(figsize=(8,6))
+        ax.set_xlim([-80, 95])
+        ax.set_ylim([-50, 50])
+        ax.set_facecolor('white')
+        fig.tight_layout()
+        plt.xlabel('x1'.translate(SUB))
+        plt.ylabel('x2'.translate(SUB))
 
-            labels = torch.argmax(tot_labels.detach().cpu(), dim=-1).reshape(-1).numpy()
+        labels = torch.argmax(tot_labels.detach().cpu(), dim=-1).reshape(-1).numpy()
+        point_colors = colors[labels]
 
-            point_colors = colors[labels]
+        plt.scatter(tsne_results[:, 0], tsne_results[:, 1], c=point_colors)
 
-            plt.scatter(tsne_results[:, 0], tsne_results[:, 1], c=point_colors)
+        legend_handles = [Patch(color=color, label=f'{label}') for i, (color, label) in enumerate(zip(colors, new_labels))]
 
-            legend_handles = [Patch(color=color, label=f'{label}') for i, (color, label) in enumerate(zip(colors, new_labels))]
+        plt.legend(handles=legend_handles, loc='best', prop={'size': 18})
 
-            plt.legend(handles=legend_handles, loc='best', prop={'size': 18})
+        plt.show()
 
-            plt.show()
-
-            fig.savefig(f"{config['visualize']}.pdf", bbox_inches='tight')
+        fig.savefig(f"{config['visualize']}.pdf", bbox_inches='tight')
